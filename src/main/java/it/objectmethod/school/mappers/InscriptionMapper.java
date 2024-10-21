@@ -1,39 +1,27 @@
 package it.objectmethod.school.mappers;
 
 import it.objectmethod.school.dtos.InscriptionDto;
-import it.objectmethod.school.models.Course;
 import it.objectmethod.school.models.Inscription;
-import it.objectmethod.school.models.Student;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import java.util.Optional;
+import java.util.List;
 
-@Component
-public class InscriptionMapper  {
+@Mapper(componentModel = "spring")
+public interface InscriptionMapper extends BaseMappingMethod<InscriptionDto, Inscription> {
+    @Override
+    @Mapping(source = "student.studentId", target = "studentId")
+    @Mapping(source = "course.courseId", target = "courseId")
+    InscriptionDto toDto(Inscription inscription);
 
-    public Inscription toEntity(InscriptionDto inscriptionDto) {
-        if (inscriptionDto == null) return null;
-        Inscription inscription = new Inscription();
-        inscription.setInscriptionId(inscriptionDto.getInscriptionId());
-        inscription.setRegistrationDate(inscriptionDto.getRegistrationDate());
-        return inscription;
-    }
+    @Override
+    @Mapping(source = "studentId", target = "student.studentId")
+    @Mapping(source = "courseId", target = "course.courseId")
+    Inscription toEntity(InscriptionDto inscriptionDto);
 
-    public Inscription toEntity(InscriptionDto inscriptionDto, Student student, Course course) {
-        if (inscriptionDto == null) return null;
-        Inscription inscription = new Inscription();
-        inscription.setInscriptionId(inscriptionDto.getInscriptionId());
-        inscription.setRegistrationDate(inscriptionDto.getRegistrationDate());
-        inscription.setStudent(student);
-        inscription.setCourse(course);
-        return inscription;
-    }
+    @Override
+    List<InscriptionDto> toDtoList(List<Inscription> inscriptions);
 
-    public InscriptionDto toDto(Inscription inscription) {
-        if (inscription == null) return null;
-        InscriptionDto inscriptionDto = new InscriptionDto();
-        inscriptionDto.setInscriptionId(inscription.getInscriptionId());
-        inscriptionDto.setRegistrationDate(inscription.getRegistrationDate());
-        return inscriptionDto;
-    }
+    @Override
+    List<Inscription> toEntityList(List<InscriptionDto> inscriptionDtos);
 }

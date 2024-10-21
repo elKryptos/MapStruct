@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,29 +20,27 @@ public class StudentService {
 
     public List<StudentDto> getAllStudent() {
         List<Student> students = studentRepository.findAll();
-        return students.stream().map(studentMapper::toDto).collect(Collectors.toList());
+        return studentMapper.toDtoList(students);
     }
 
     public StudentResponse findById(int id) {
-        Optional<Student> studentOptional = studentRepository.findById(id);
-        StudentDto studentDto = null;
+       Optional<Student> studentOptional = studentRepository.findById(id);
         if (studentOptional.isPresent()) {
-            Student student = new Student();
-            student = studentOptional.get();
-            studentDto = new StudentDto(student.getName(), student.getSurname());
+            Student student = studentOptional.get();
+            StudentDto studentDto = studentMapper.toDto(student);
             return new StudentResponse("Student found", studentDto);
         }
-        return new StudentResponse("Student not found", studentDto);
+        return new StudentResponse("Student not found", null);
     }
 
     public StudentResponse createStudent(StudentDto studentDto) {
-        Student student = new Student();
         if (studentDto.getName() == null || studentDto.getName().isEmpty() ||
                 studentDto.getSurname() == null || studentDto.getSurname().isEmpty()) {
             return new StudentResponse("The blanks cannot be empty");
         }
-        student.setName(studentDto.getName());
-        student.setSurname(studentDto.getSurname());
+//        student.setName(studentDto.getName());
+//        student.setSurname(studentDto.getSurname());
+        Student student = studentMapper.toEntity(studentDto);
         try {
             studentRepository.save(student);
         } catch (Exception e) {

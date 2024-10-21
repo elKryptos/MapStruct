@@ -45,7 +45,7 @@ public class InscriptionService {
 //    }
 
     public InscriptionResponse enrollStudent(InscriptionDto inscriptionDto) {
-        Student student = studentRepository.findById(inscriptionDto.getStudentId()).orElse(null);
+        Student student =studentRepository.findById(inscriptionDto.getStudentId()).orElse(null);
         if (student == null) {
             return new InscriptionResponse("Student not found");
         }
@@ -53,9 +53,13 @@ public class InscriptionService {
         if (course == null) {
             return new InscriptionResponse("Course not found");
         }
-        Inscription inscription = inscriptionMapper.toEntity(inscriptionDto, student, course);
+        Inscription inscription = inscriptionMapper.toEntity(inscriptionDto);
+        inscription.setRegistrationDate(System.currentTimeMillis());
+        inscription.setStudent(student);
+        inscription.setCourse(course);
         inscriptionRepository.save(inscription);
-        return new InscriptionResponse("Student enrolled", inscriptionDto);
+        InscriptionDto savedInscriptionDto = inscriptionMapper.toDto(inscription);
+        return new InscriptionResponse("Student enrolled", savedInscriptionDto);
     }
 
 }

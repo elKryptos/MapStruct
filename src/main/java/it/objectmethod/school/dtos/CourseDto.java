@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CourseDto {
-    private Integer id;
+    private Integer courseId;
     private String name;
-
 }

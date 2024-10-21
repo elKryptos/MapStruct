@@ -11,10 +11,6 @@ public class InscriptionDto {
     private Integer studentId;
     private Integer courseId;
 
-    public InscriptionDto(long registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
     public InscriptionDto(long registrationDate, Integer studentId, Integer courseId) {
         this.registrationDate = registrationDate;
         this.studentId = studentId;

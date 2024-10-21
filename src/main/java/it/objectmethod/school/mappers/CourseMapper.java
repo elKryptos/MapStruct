@@ -2,28 +2,23 @@ package it.objectmethod.school.mappers;
 
 import it.objectmethod.school.dtos.CourseDto;
 import it.objectmethod.school.models.Course;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 
-import java.util.Optional;
+import java.util.List;
 
-@Component
-public class CourseMapper {
-    public CourseDto toDto(Course course) {
-        if(course == null) return null;
-        CourseDto courseDto = new CourseDto();
-        courseDto.setId(course.getCourseId());
-        courseDto.setName(course.getName());
-        return courseDto;
-    }
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface CourseMapper extends BaseMappingMethod <CourseDto, Course> {
+    @Override
+    CourseDto toDto(Course course);
 
-    public Course toEntity(CourseDto courseDto) {
-        Optional<CourseDto> optionalCourseDto = Optional.ofNullable(courseDto);
-        if(optionalCourseDto.isPresent()) {
-            Course course = new Course();
-            course.setCourseId(optionalCourseDto.get().getId());
-            course.setName(optionalCourseDto.get().getName());
-            return course;
-        }
-        return null;
-    }
+    @Override
+    Course toEntity(CourseDto dto);
+
+    @Override
+    List<CourseDto> toDtoList(List<Course> course);
+
+    @Override
+    List<Course> toEntityList(List<CourseDto> courseDto);
+
 }

@@ -1,7 +1,6 @@
 package it.objectmethod.school.controllers;
 
 import it.objectmethod.school.dtos.CourseDto;
-import it.objectmethod.school.models.Course;
 import it.objectmethod.school.responses.CourseResponse;
 import it.objectmethod.school.services.CourseService;
 import lombok.RequiredArgsConstructor;

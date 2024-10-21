@@ -2,40 +2,27 @@ package it.objectmethod.school.mappers;
 
 import it.objectmethod.school.dtos.InscriptionDto;
 import it.objectmethod.school.dtos.StudentDto;
+import it.objectmethod.school.models.Inscription;
 import it.objectmethod.school.models.Student;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-@Component
-public class StudentMapper {
-    public StudentDto toDto(Student student) {
-        return Optional.ofNullable(student).map(stud -> {
-            StudentDto studentDto = new StudentDto();
-            studentDto.setName(stud.getName());
-            studentDto.setSurname(stud.getSurname());
+@Mapper(componentModel = "spring", uses = InscriptionMapper.class)
+public interface StudentMapper extends BaseMappingMethod<StudentDto, Student> {
 
-            List<InscriptionDto> inscriptionDtos = Optional.ofNullable(stud.getInscriptions())
-                    .map(inscriptions -> inscriptions.stream()
-                            .map(inscription -> new InscriptionDto(
-                                    inscription.getRegistrationDate()
-                            ))
-                            .collect(Collectors.toList()))
-                    .orElse(new ArrayList<>());
-            studentDto.setInscriptionsDto(inscriptionDtos);
-            return studentDto;
-        }).orElseThrow(() -> new IllegalArgumentException("Student cannot be null"));
-    }
+    @Override
+    StudentDto toDto(Student student);
 
-    public Student toEntity(StudentDto studentDto) {
-        return Optional.ofNullable(studentDto).map(dto -> {
-            Student student = new Student();
-            student.setName(studentDto.getName());
-            student.setSurname(studentDto.getSurname());
-            return student;
-        }).orElseThrow(() -> new IllegalArgumentException("Student cannot be null"));
-    }
+    @Override
+    Student toEntity(StudentDto studentDto);
+
+    @Override
+    List<StudentDto> toDtoList(List<Student> students);
+
+    @Override
+    List<Student> toEntityList(List<StudentDto> studentDtos);
+
+    List<InscriptionDto> toInscriptionDtoList(List<Inscription> inscriptions);
+
 }
