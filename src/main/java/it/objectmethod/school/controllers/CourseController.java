@@ -24,8 +24,8 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseResponse> getCourseById(@PathVariable int id) {
-        CourseResponse response = courseService.getCourseById(id);
+    public ResponseEntity<CourseResponse> findById(@PathVariable int id) {
+        CourseResponse response = courseService.findById(id);
         if(response != null) {
             return ResponseEntity
                     .status(HttpStatus.OK)

@@ -23,7 +23,7 @@ public class CourseService {
         return courses.stream().map(courseMapper::toDto).collect(Collectors.toList());
     }
 
-    public CourseResponse getCourseById(int id) {
+    public CourseResponse findById(int id) {
 //        Optional<Course> courseOptional = courseRepository.findById(id);
 //        CourseDto  courseDto = null;
 //        if(courseOptional.isPresent()) {
