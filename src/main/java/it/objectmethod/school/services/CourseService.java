@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,21 +25,20 @@ public class CourseService {
     }
 
     public CourseResponse findById(int id) {
-//        Optional<Course> courseOptional = courseRepository.findById(id);
-//        CourseDto  courseDto = null;
-//        if(courseOptional.isPresent()) {
-//            Course course = courseOptional.get();
-//            courseDto = new CourseDto(course.getName());
-//            return new CourseResponse("Course found!", courseDto);
-//        }
-//        return new CourseResponse("Course not found!", courseDto);
+        Optional<Course> courseOptional = courseRepository.findById(id);
+        if(courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            CourseDto courseDto = courseMapper.toDto(course);
+            return new CourseResponse("Course found!", courseDto);
+        }
+        return new CourseResponse("Course not found!", null);
 
-        return courseRepository.findById(id)
-                .map(course -> {
-                    CourseDto courseDto = courseMapper.toDto(course);
-                    return new CourseResponse("Course found", courseDto);
-                })
-                .orElseGet(() -> new CourseResponse("Course not found"));
+//        return courseRepository.findById(id)
+//                .map(course -> {
+//                    CourseDto courseDto = courseMapper.toDto(course);
+//                    return new CourseResponse("Course found", courseDto);
+//                })
+//                .orElseGet(() -> new CourseResponse("Course not found"));
     }
 
     public CourseResponse createCourse(CourseDto courseDto) {
