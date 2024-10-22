@@ -1,7 +1,7 @@
 package it.objectmethod.school.controllers;
 
 import it.objectmethod.school.dtos.InscriptionDto;
-import it.objectmethod.school.responses.InscriptionResponse;
+import it.objectmethod.school.responses.ResponseWrapper;
 import it.objectmethod.school.services.InscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,9 +17,14 @@ public class InscriptionController {
 
     private final InscriptionService inscriptionService;
 
+    @GetMapping("all")
+    public List<InscriptionDto> getAllInscriptions() {
+        return inscriptionService.getAllInscriptions();
+    }
+
     @PostMapping("/enroll")
-    public ResponseEntity<InscriptionResponse> enrollStudent(@RequestBody InscriptionDto inscriptionDto) {
-        InscriptionResponse response = inscriptionService.enrollStudent(inscriptionDto);
+    public ResponseEntity<ResponseWrapper<InscriptionDto>> enrollStudent(@RequestBody InscriptionDto inscriptionDto) {
+        ResponseWrapper<InscriptionDto> response = inscriptionService.enrollStudent(inscriptionDto);
         if (response != null) {
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -30,8 +35,4 @@ public class InscriptionController {
                 .body(response);
     }
 
-    @GetMapping("all")
-    public List<InscriptionDto> getAllInscriptions() {
-        return inscriptionService.getAllInscriptions();
-    }
 }

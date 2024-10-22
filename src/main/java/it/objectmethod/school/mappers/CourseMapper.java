@@ -3,7 +3,6 @@ package it.objectmethod.school.mappers;
 import it.objectmethod.school.dtos.CourseDto;
 import it.objectmethod.school.entities.Course;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
 import java.util.List;

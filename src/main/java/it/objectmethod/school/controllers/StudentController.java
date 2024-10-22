@@ -1,8 +1,9 @@
 package it.objectmethod.school.controllers;
 
 import it.objectmethod.school.dtos.StudentDto;
+import it.objectmethod.school.entities.Student;
+import it.objectmethod.school.filters.StudentParams;
 import it.objectmethod.school.responses.ResponseWrapper;
-import it.objectmethod.school.responses.StudentResponse;
 import it.objectmethod.school.services.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,5 +42,26 @@ public class StudentController {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(null);
+    }
+
+    @GetMapping("/name")
+    public ResponseEntity<ResponseWrapper<List<StudentDto>>> findByName(@RequestParam String name) {
+        ResponseWrapper<List<StudentDto>> response = studentService.findByName(name);
+        if (response != null) return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/surname")
+    public ResponseEntity<ResponseWrapper<List<StudentDto>>> findBySurname(@RequestParam String surname) {
+        ResponseWrapper<List<StudentDto>> response = studentService.findBySurname(surname);
+        if (response != null) return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<ResponseWrapper<List<StudentDto>>> findByNameAndSurname(final StudentParams studentParams) {
+        ResponseWrapper<List<StudentDto>> response = studentService.findStudentByNameAndSurname(studentParams);
+        if (response != null) return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

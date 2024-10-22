@@ -1,14 +1,14 @@
 package it.objectmethod.school.services;
 
 import it.objectmethod.school.dtos.InscriptionDto;
-import it.objectmethod.school.mappers.InscriptionMapper;
 import it.objectmethod.school.entities.Course;
 import it.objectmethod.school.entities.Inscription;
 import it.objectmethod.school.entities.Student;
+import it.objectmethod.school.mappers.InscriptionMapper;
 import it.objectmethod.school.repositories.CourseRepository;
 import it.objectmethod.school.repositories.InscriptionRepository;
 import it.objectmethod.school.repositories.StudentRepository;
-import it.objectmethod.school.responses.InscriptionResponse;
+import it.objectmethod.school.responses.ResponseWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,14 +44,14 @@ public class InscriptionService {
 //        return new InscriptionResponse("Student enrolled", inscriptionDto);
 //    }
 
-    public InscriptionResponse enrollStudent(InscriptionDto inscriptionDto) {
+    public ResponseWrapper<InscriptionDto> enrollStudent(InscriptionDto inscriptionDto) {
         Student student =studentRepository.findById(inscriptionDto.getStudentId()).orElse(null);
         if (student == null) {
-            return new InscriptionResponse("Student not found");
+            return new ResponseWrapper<>("Student not found");
         }
         Course course = courseRepository.findById(inscriptionDto.getCourseId()).orElse(null);
         if (course == null) {
-            return new InscriptionResponse("Course not found");
+            return new ResponseWrapper<>("Course not found");
         }
         Inscription inscription = inscriptionMapper.toEntity(inscriptionDto);
         inscription.setRegistrationDate(System.currentTimeMillis());
@@ -59,7 +59,7 @@ public class InscriptionService {
         inscription.setCourse(course);
         inscriptionRepository.save(inscription);
         InscriptionDto savedInscriptionDto = inscriptionMapper.toDto(inscription);
-        return new InscriptionResponse("Student enrolled", savedInscriptionDto);
+        return new ResponseWrapper<>("Student enrolled", savedInscriptionDto);
     }
 
 }

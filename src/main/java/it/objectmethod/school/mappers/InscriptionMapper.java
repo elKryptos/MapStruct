@@ -10,13 +10,13 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface InscriptionMapper extends BaseMappingMethod<InscriptionDto, Inscription> {
     @Override
-    @Mapping(source = "student.studentId", target = "studentId")
-    @Mapping(source = "course.courseId", target = "courseId")
+    @Mapping(target = "studentId", source = "student.studentId")
+    @Mapping(target = "courseId", source = "course.courseId")
     InscriptionDto toDto(Inscription inscription);
 
     @Override
-    @Mapping(source = "studentId", target = "student.studentId")
-    @Mapping(source = "courseId", target = "course.courseId")
+    @Mapping(target = "student.studentId", source = "studentId")
+    @Mapping(target = "course.courseId", source = "courseId")
     Inscription toEntity(InscriptionDto inscriptionDto);
 
     @Override
