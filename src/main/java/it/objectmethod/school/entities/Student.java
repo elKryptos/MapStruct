@@ -1,4 +1,4 @@
-package it.objectmethod.school.models;
+package it.objectmethod.school.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,7 +1,7 @@
 package it.objectmethod.school.mappers;
 
 import it.objectmethod.school.dtos.InscriptionDto;
-import it.objectmethod.school.models.Inscription;
+import it.objectmethod.school.entities.Inscription;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

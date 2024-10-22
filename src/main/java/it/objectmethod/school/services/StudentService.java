@@ -2,8 +2,9 @@ package it.objectmethod.school.services;
 
 import it.objectmethod.school.dtos.StudentDto;
 import it.objectmethod.school.mappers.StudentMapper;
-import it.objectmethod.school.models.Student;
+import it.objectmethod.school.entities.Student;
 import it.objectmethod.school.repositories.StudentRepository;
+import it.objectmethod.school.responses.ResponseWrapper;
 import it.objectmethod.school.responses.StudentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,20 +24,20 @@ public class StudentService {
         return studentMapper.toDtoList(students);
     }
 
-    public StudentResponse findById(int id) {
-       Optional<Student> studentOptional = studentRepository.findById(id);
+    public ResponseWrapper<StudentDto> findById(int id) {
+        Optional<Student> studentOptional = studentRepository.findById(id);
         if (studentOptional.isPresent()) {
             Student student = studentOptional.get();
             StudentDto studentDto = studentMapper.toDto(student);
-            return new StudentResponse("Student found", studentDto);
+            return new ResponseWrapper<>("Student found", studentDto);
         }
-        return new StudentResponse("Student not found", null);
+        return new ResponseWrapper<>("Student not found", null);
     }
 
-    public StudentResponse createStudent(StudentDto studentDto) {
+    public ResponseWrapper<StudentDto> createStudent(StudentDto studentDto) {
         if (studentDto.getName() == null || studentDto.getName().isEmpty() ||
                 studentDto.getSurname() == null || studentDto.getSurname().isEmpty()) {
-            return new StudentResponse("The blanks cannot be empty");
+            return new ResponseWrapper<>("The blanks cannot be empty");
         }
 //        student.setName(studentDto.getName());
 //        student.setSurname(studentDto.getSurname());
@@ -44,8 +45,8 @@ public class StudentService {
         try {
             studentRepository.save(student);
         } catch (Exception e) {
-            return new StudentResponse("DB error creating the student");
+            return new ResponseWrapper<>("DB error creating the student");
         }
-        return new StudentResponse("Student created successfully", studentDto);
+        return new ResponseWrapper<>("Student created successfully", studentDto);
     }
 }

@@ -2,9 +2,9 @@ package it.objectmethod.school.services;
 
 import it.objectmethod.school.dtos.InscriptionDto;
 import it.objectmethod.school.mappers.InscriptionMapper;
-import it.objectmethod.school.models.Course;
-import it.objectmethod.school.models.Inscription;
-import it.objectmethod.school.models.Student;
+import it.objectmethod.school.entities.Course;
+import it.objectmethod.school.entities.Inscription;
+import it.objectmethod.school.entities.Student;
 import it.objectmethod.school.repositories.CourseRepository;
 import it.objectmethod.school.repositories.InscriptionRepository;
 import it.objectmethod.school.repositories.StudentRepository;

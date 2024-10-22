@@ -1,6 +1,7 @@
 package it.objectmethod.school.controllers;
 
 import it.objectmethod.school.dtos.StudentDto;
+import it.objectmethod.school.responses.ResponseWrapper;
 import it.objectmethod.school.responses.StudentResponse;
 import it.objectmethod.school.services.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -19,26 +20,26 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping("/all")
-    public List<StudentDto> getAll(){
+    public List<StudentDto> getAll() {
         return studentService.getAllStudent();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentResponse> getStudentById(@PathVariable int id){
-        StudentResponse response = studentService.findById(id);
+    public ResponseEntity<ResponseWrapper<StudentDto>> getStudentById(@PathVariable int id) {
+        ResponseWrapper<StudentDto> response = studentService.findById(id);
         if (response != null) return new ResponseEntity<>(response, HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/createStudent")
-    public ResponseEntity<StudentResponse> createStudent(@RequestBody StudentDto studentDto){
-        StudentResponse response = studentService.createStudent(studentDto);
+    public ResponseEntity<ResponseWrapper<StudentDto>> createStudent(@RequestBody StudentDto studentDto) {
+        ResponseWrapper<StudentDto> response = studentService.createStudent(studentDto);
         if (response != null)
             return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(response);
+                    .status(HttpStatus.CREATED)
+                    .body(response);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(response);
+                .body(null);
     }
 }
