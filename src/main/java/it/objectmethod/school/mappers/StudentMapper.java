@@ -5,13 +5,15 @@ import it.objectmethod.school.dtos.StudentDto;
 import it.objectmethod.school.entities.Inscription;
 import it.objectmethod.school.entities.Student;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = InscriptionMapper.class)
+@Mapper(componentModel = "spring")
 public interface StudentMapper extends BaseMappingMethod<StudentDto, Student> {
 
     @Override
+    @Mapping(target = "inscriptionsDto", source = "inscriptions")
     StudentDto toDto(Student student);
 
     @Override
@@ -22,6 +24,8 @@ public interface StudentMapper extends BaseMappingMethod<StudentDto, Student> {
 
     @Override
     List<Student> toEntityList(List<StudentDto> studentDtos);
+
+    InscriptionDto toInscriptionDto(Inscription inscription);
 
     List<Inscription> toInscriptionEntity(List<InscriptionDto> inscriptionsDtos);
 

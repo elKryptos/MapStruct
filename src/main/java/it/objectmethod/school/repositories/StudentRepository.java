@@ -6,13 +6,23 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
-    @Query(value = "select * from student where name = :name;", nativeQuery = true)
+
     List<Student> findStudentByName(String name);
-    @Query(value = "select * from student where surname = :surname", nativeQuery = true)
+
     List<Student> findStudentBySurname(String surname);
-    @Query(value = "select * from student where name = :name and surname = :surname", nativeQuery = true)
+
     List<Student> findStudentByNameAndSurname(String name, String surname);
+
+    @Query(value = "select * from student where name = :name;", nativeQuery = true)
+    List<Student> byName(@Param(value = "name") String name);
+
+    @Query(value = "select * from student where surname = :surname", nativeQuery = true)
+    List<Student> bySurname(String surname);
+
+    @Query(value = "select * from student where name = :name and surname = :surname", nativeQuery = true)
+    List<Student> studentByNameAndSurname(String name, String surname);
+
+
 }

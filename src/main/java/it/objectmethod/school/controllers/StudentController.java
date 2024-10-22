@@ -1,7 +1,6 @@
 package it.objectmethod.school.controllers;
 
 import it.objectmethod.school.dtos.StudentDto;
-import it.objectmethod.school.entities.Student;
 import it.objectmethod.school.filters.StudentParams;
 import it.objectmethod.school.responses.ResponseWrapper;
 import it.objectmethod.school.services.StudentService;
@@ -44,8 +43,25 @@ public class StudentController {
                 .body(null);
     }
 
+    @PutMapping("/updateStudent")
+    public ResponseEntity<ResponseWrapper<StudentDto>> updateStudent(@RequestParam Integer id, @RequestBody StudentDto studentDto) {
+        ResponseWrapper<StudentDto> response = studentService.updateStudent(id, studentDto);
+        if (response != null)
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(response);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
     @GetMapping("/name")
     public ResponseEntity<ResponseWrapper<List<StudentDto>>> findByName(@RequestParam String name) {
+        ResponseWrapper<List<StudentDto>> response = studentService.findByName(name);
+        if (response != null) return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/name1")
+    public ResponseEntity<ResponseWrapper<List<StudentDto>>> byName1(@RequestParam String name) {
         ResponseWrapper<List<StudentDto>> response = studentService.findByName(name);
         if (response != null) return new ResponseEntity<>(response, HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -64,4 +80,17 @@ public class StudentController {
         if (response != null) return new ResponseEntity<>(response, HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+//    @GetMapping("/query/{}")
+//    public ResponseEntity<ResponseWrapper<List<StudentDto>>> findStudentById(@PathVariable int courseId) {
+//        ResponseWrapper<List<StudentDto>> response = studentService.findStudentByCourseId(courseId);
+//        if (response != null) {
+//            return ResponseEntity
+//                    .status(HttpStatus.OK)
+//                    .body(response);
+//        }
+//        return ResponseEntity
+//                .status(HttpStatus.NOT_FOUND)
+//                .body(new ResponseWrapper<>("Utente non trovato"));
+//    }
 }

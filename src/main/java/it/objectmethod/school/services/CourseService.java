@@ -2,7 +2,6 @@ package it.objectmethod.school.services;
 
 import it.objectmethod.school.dtos.CourseDto;
 import it.objectmethod.school.entities.Course;
-import it.objectmethod.school.filters.StudentParams;
 import it.objectmethod.school.mappers.CourseMapper;
 import it.objectmethod.school.repositories.CourseRepository;
 import it.objectmethod.school.responses.ResponseWrapper;
