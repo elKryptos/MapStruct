@@ -6,6 +6,7 @@ import it.objectmethod.school.services.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,7 +43,29 @@ public class CourseController {
                     .status(HttpStatus.CREATED)
                     .body(response);
         }
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @Transactional
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ResponseWrapper<CourseDto>> updateCourse(
+            @PathVariable int id,
+            @RequestBody CourseDto courseDto) {
+        ResponseWrapper<CourseDto> response = courseService.updateCourse(id, courseDto);
+        if (response != null) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @Transactional
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseWrapper<CourseDto>> deleteCourse(@PathVariable int id) {
+        ResponseWrapper<CourseDto> response = courseService.deleteCourse(id);
+        if (response != null) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("")
@@ -51,7 +74,7 @@ public class CourseController {
         if (response != null) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 

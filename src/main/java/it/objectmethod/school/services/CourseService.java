@@ -51,6 +51,29 @@ public class CourseService {
         return new ResponseWrapper<>("Course created", savedCourseDto);
     }
 
+    public ResponseWrapper<CourseDto> updateCourse(int id, CourseDto courseDto) {
+        Optional<Course> courseOptional = courseRepository.findById(id);
+        if(courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            course.setName(courseDto.getName());
+            courseRepository.save(course);
+            CourseDto savedCourseDto = courseMapper.toDto(course);
+            return new ResponseWrapper<>("Course updated", savedCourseDto);
+        }
+        return new ResponseWrapper<>("Course not found!");
+    }
+
+    public ResponseWrapper<CourseDto> deleteCourse(int id) {
+        Optional<Course> courseOptional = courseRepository.findById(id);
+        if(courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            courseRepository.delete(course);
+            CourseDto savedCourseDto = courseMapper.toDto(course);
+            return new ResponseWrapper<>("Course deleted", savedCourseDto);
+        }
+        return new ResponseWrapper<>("Course not found!");
+    }
+
     public ResponseWrapper<CourseDto> findCourseByName(String name) {
         if (name == null || name.isEmpty()) {
             return new ResponseWrapper<>("Name not found");

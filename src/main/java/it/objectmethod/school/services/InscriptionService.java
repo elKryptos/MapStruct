@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,6 +61,16 @@ public class InscriptionService {
         inscriptionRepository.save(inscription);
         InscriptionDto savedInscriptionDto = inscriptionMapper.toDto(inscription);
         return new ResponseWrapper<>("Student enrolled", savedInscriptionDto);
+    }
+
+    public ResponseWrapper<InscriptionDto> deleteEnrollment(InscriptionDto inscriptionDto) {
+        Inscription inscription = inscriptionRepository.findById(inscriptionDto.getInscriptionId()).orElse(null);
+        if (inscription == null) {
+            return new ResponseWrapper<>("Inscription not found");
+        }
+        inscriptionRepository.delete(inscription);
+        InscriptionDto savedInscriptionDto = inscriptionMapper.toDto(inscription);
+        return new ResponseWrapper<>("Inscription deleted!", savedInscriptionDto);
     }
 
 }

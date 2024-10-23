@@ -84,7 +84,7 @@ public class StudentService {
         if (response != null) {
             return new ResponseWrapper<>(Constants.positive, studentDto);
         }
-        return new ResponseWrapper<>(Constants.negative, null);
+        return new ResponseWrapper<>(Constants.negative);
     }
 
     public ResponseWrapper<List<StudentDto>> byName(String name) {
@@ -93,7 +93,7 @@ public class StudentService {
         if (response != null) {
             return new ResponseWrapper<>(Constants.positive, studentDto);
         }
-        return new ResponseWrapper<>(Constants.negative, null);
+        return new ResponseWrapper<>(Constants.negative);
     }
 
     public ResponseWrapper<List<StudentDto>> findBySurname(String surname) {
@@ -102,7 +102,7 @@ public class StudentService {
         if (studentDto != null) {
             return new ResponseWrapper<>(Constants.positive, studentDto);
         }
-        return new ResponseWrapper<>(Constants.negative, null);
+        return new ResponseWrapper<>(Constants.negative);
     }
 
     public ResponseWrapper<List<StudentDto>> bySurname(String surname) {
@@ -111,7 +111,7 @@ public class StudentService {
         if (studentDto != null) {
             return new ResponseWrapper<>(Constants.positive, studentDto);
         }
-        return new ResponseWrapper<>(Constants.negative, null);
+        return new ResponseWrapper<>(Constants.negative);
     }
 
     public ResponseWrapper<List<StudentDto>> findStudentByNameAndSurname(StudentParams studentParams) {
@@ -120,7 +120,7 @@ public class StudentService {
         if (studentDto != null) {
             return new ResponseWrapper<>(Constants.positive, studentDto);
         }
-        return new ResponseWrapper<>(Constants.negative, null);
+        return new ResponseWrapper<>(Constants.negative);
     }
 
     public ResponseWrapper<List<StudentDto>> studentByNameAndSurname(StudentParams studentParams) {
@@ -129,7 +129,7 @@ public class StudentService {
         if (studentDto != null) {
             return new ResponseWrapper<>(Constants.positive, studentDto);
         }
-        return new ResponseWrapper<>(Constants.negative, null);
+        return new ResponseWrapper<>(Constants.negative);
     }
 
 //    public ResponseWrapper<List<StudentDto>> findStudentByCourseId(int courseId) {
@@ -147,7 +147,7 @@ public class StudentService {
         if (studentDto != null) {
             return new ResponseWrapper<>(Constants.positive, studentDto);
         }
-        return new ResponseWrapper<>(Constants.negative, null);
+        return new ResponseWrapper<>(Constants.negative);
     }
 
 }

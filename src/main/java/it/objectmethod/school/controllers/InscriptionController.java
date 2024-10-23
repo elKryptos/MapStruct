@@ -30,9 +30,16 @@ public class InscriptionController {
                     .status(HttpStatus.OK)
                     .body(response);
         }
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(response);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<ResponseWrapper<InscriptionDto>> withdrawStudent(@RequestBody InscriptionDto inscriptionDto) {
+        ResponseWrapper<InscriptionDto> response = inscriptionService.deleteEnrollment(inscriptionDto);
+        if (response != null) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
