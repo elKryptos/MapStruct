@@ -10,6 +10,7 @@ import it.objectmethod.school.responses.ResponseWrapper;
 import it.objectmethod.school.utils.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -66,7 +67,7 @@ public class StudentService {
         }
         return new ResponseWrapper<>(Constants.studentNotUpdated, null);
     }
-
+    @Transactional
     public ResponseWrapper<StudentDto> deleteStudent(Integer id) {
         Optional<Student> studentOptional = studentRepository.findById(id);
         if (studentOptional.isPresent()) {
