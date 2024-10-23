@@ -67,6 +67,17 @@ public class StudentService {
         return new ResponseWrapper<>(Constants.studentNotUpdated, null);
     }
 
+    public ResponseWrapper<StudentDto> deleteStudent(Integer id) {
+        Optional<Student> studentOptional = studentRepository.findById(id);
+        if (studentOptional.isPresent()) {
+            Student student = studentOptional.get();
+            studentRepository.delete(student);
+            StudentDto savedStudentDto = studentMapper.toDto(student);
+            return new ResponseWrapper<>(Constants.studentDeleted, savedStudentDto);
+        }
+        return new ResponseWrapper<>(Constants.negative);
+    }
+
     public ResponseWrapper<List<StudentDto>> findByName(String name) {
         List<Student> response = studentRepository.findStudentByName(name);
         List<StudentDto> studentDto = studentMapper.toDtoList(response);
