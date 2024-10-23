@@ -3,6 +3,7 @@ package it.objectmethod.school.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,7 +15,7 @@ public class Course {
     private Integer courseId;
     private String name;
 
-    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-    private List<Inscription> inscriptions;
+    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
+    private List<Inscription> inscriptions = new ArrayList<>();
 
 }

@@ -93,4 +93,11 @@ public class StudentController {
 //                .status(HttpStatus.NOT_FOUND)
 //                .body(new ResponseWrapper<>("Utente non trovato"));
 //    }
+
+    @GetMapping("all/{studentId}")
+    public ResponseEntity<ResponseWrapper<List<StudentDto>>> findStudentByInscriptionsAndCourse (@PathVariable int studentId){
+        ResponseWrapper<List<StudentDto>> response = studentService.findStudentByInscriptionsAndCourse(studentId);
+        if (response != null) return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }

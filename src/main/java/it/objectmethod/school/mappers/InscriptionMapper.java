@@ -12,11 +12,13 @@ public interface InscriptionMapper extends BaseMappingMethod<InscriptionDto, Ins
     @Override
     @Mapping(target = "studentId", source = "student.studentId")
     @Mapping(target = "courseId", source = "course.courseId")
+    @Mapping(target = "courseDto", source = "course")
     InscriptionDto toDto(Inscription inscription);
 
     @Override
     @Mapping(target = "student.studentId", source = "studentId")
     @Mapping(target = "course.courseId", source = "courseId")
+    @Mapping(target = "course", source = "courseDto")
     Inscription toEntity(InscriptionDto inscriptionDto);
 
     @Override
@@ -24,4 +26,5 @@ public interface InscriptionMapper extends BaseMappingMethod<InscriptionDto, Ins
 
     @Override
     List<Inscription> toEntityList(List<InscriptionDto> inscriptionDtos);
+
 }

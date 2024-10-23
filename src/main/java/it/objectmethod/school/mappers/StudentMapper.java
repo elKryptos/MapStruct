@@ -25,6 +25,8 @@ public interface StudentMapper extends BaseMappingMethod<StudentDto, Student> {
     @Override
     List<Student> toEntityList(List<StudentDto> studentDtos);
 
+    @Mapping(target = "studentId", source = "student.studentId")
+    @Mapping(target = "courseId", source = "course.courseId")
     InscriptionDto toInscriptionDto(Inscription inscription);
 
     List<Inscription> toInscriptionEntity(List<InscriptionDto> inscriptionsDtos);

@@ -130,4 +130,13 @@ public class StudentService {
 //        return new ResponseWrapper<>("Student not found", null);
 //    }
 
+    public ResponseWrapper<List<StudentDto>> findStudentByInscriptionsAndCourse (int studentId) {
+        List<Student> response = studentRepository.findStudentByInscriptionsAndCourse(studentId);
+        List<StudentDto> studentDto = studentMapper.toDtoList(response);
+        if (studentDto != null) {
+            return new ResponseWrapper<>(Constants.positive, studentDto);
+        }
+        return new ResponseWrapper<>(Constants.negative, null);
+    }
+
 }
