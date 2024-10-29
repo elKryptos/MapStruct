@@ -1,7 +1,8 @@
 package it.objectmethod.school.controllers;
 
-import it.objectmethod.school.dtos.InscriptionDto;
-import it.objectmethod.school.responses.ResponseWrapper;
+import it.objectmethod.school.models.dtos.InscriptionDto;
+import it.objectmethod.school.models.entities.Inscription;
+import it.objectmethod.school.responses.InscriptionResponse;
 import it.objectmethod.school.services.InscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,28 +19,20 @@ public class InscriptionController {
     private final InscriptionService inscriptionService;
 
     @GetMapping("all")
-    public List<InscriptionDto> getAllInscriptions() {
-        return inscriptionService.getAllInscriptions();
+    public List<Inscription> getAll() {
+        return inscriptionService.getALlInscriptions();
     }
 
     @PostMapping("/enroll")
-    public ResponseEntity<ResponseWrapper<InscriptionDto>> enrollStudent(@RequestBody InscriptionDto inscriptionDto) {
-        ResponseWrapper<InscriptionDto> response = inscriptionService.enrollStudent(inscriptionDto);
+    public ResponseEntity<InscriptionResponse> enrollStudent(@RequestBody InscriptionDto inscriptionDto) {
+        InscriptionResponse response = inscriptionService.enrollStudent(inscriptionDto);
         if (response != null) {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(response);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(response);
     }
-
-    @DeleteMapping("/withdraw")
-    public ResponseEntity<ResponseWrapper<InscriptionDto>> withdrawStudent(@RequestBody InscriptionDto inscriptionDto) {
-        ResponseWrapper<InscriptionDto> response = inscriptionService.deleteEnrollment(inscriptionDto);
-        if (response != null) {
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
 }

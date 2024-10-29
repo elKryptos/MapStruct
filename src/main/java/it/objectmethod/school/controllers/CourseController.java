@@ -1,12 +1,12 @@
 package it.objectmethod.school.controllers;
 
-import it.objectmethod.school.dtos.CourseDto;
-import it.objectmethod.school.responses.ResponseWrapper;
+import it.objectmethod.school.models.dtos.CourseDto;
+import it.objectmethod.school.models.entities.Course;
+import it.objectmethod.school.responses.CourseResponse;
 import it.objectmethod.school.services.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,13 +20,13 @@ public class CourseController {
     private final CourseService courseService;
 
     @GetMapping("/all")
-    public List<CourseDto> getAllCourses() {
+    public List<Course> getAllCourses() {
         return courseService.getAllCourses();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<CourseDto>> findById(@PathVariable int id) {
-        ResponseWrapper<CourseDto> response = courseService.findById(id);
+    public ResponseEntity<CourseResponse> getCourseById(@PathVariable int id) {
+        CourseResponse response = courseService.getCourseById(id);
         if(response != null) {
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -36,45 +36,14 @@ public class CourseController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseWrapper<CourseDto>> createCourse(@RequestBody CourseDto courseDto) {
-        ResponseWrapper<CourseDto> response = courseService.createCourse(courseDto);
+    public ResponseEntity<CourseResponse> createCourse(@RequestBody CourseDto courseDto) {
+        CourseResponse response = courseService.createCourse(courseDto);
         if (response != null) {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(response);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-
-    @Transactional
-    @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseWrapper<CourseDto>> updateCourse(
-            @PathVariable int id,
-            @RequestBody CourseDto courseDto) {
-        ResponseWrapper<CourseDto> response = courseService.updateCourse(id, courseDto);
-        if (response != null) {
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-
-    @Transactional
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseWrapper<CourseDto>> deleteCourse(@PathVariable int id) {
-        ResponseWrapper<CourseDto> response = courseService.deleteCourse(id);
-        if (response != null) {
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-
-    @GetMapping("")
-    public ResponseEntity<ResponseWrapper<CourseDto>> findCourseByName(@RequestParam String name) {
-        ResponseWrapper<CourseDto> response = courseService.findCourseByName(name);
-        if (response != null) {
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
 

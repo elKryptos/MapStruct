@@ -1,16 +1,11 @@
 package it.objectmethod.school.services;
 
-import it.objectmethod.school.dtos.StudentDto;
-import it.objectmethod.school.entities.Student;
-import it.objectmethod.school.filters.StudentParams;
-import it.objectmethod.school.mappers.InscriptionMapper;
-import it.objectmethod.school.mappers.StudentMapper;
+import it.objectmethod.school.models.dtos.StudentDto;
+import it.objectmethod.school.models.entities.Student;
 import it.objectmethod.school.repositories.StudentRepository;
-import it.objectmethod.school.responses.ResponseWrapper;
-import it.objectmethod.school.utils.Constants;
+import it.objectmethod.school.responses.StudentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,135 +15,36 @@ import java.util.Optional;
 public class StudentService {
 
     private final StudentRepository studentRepository;
-    private final StudentMapper studentMapper;
-    private final InscriptionMapper inscriptionMapper;
 
-    public List<StudentDto> getAllStudent() {
-        List<Student> students = studentRepository.findAll();
-        return studentMapper.toDtoList(students);
+    public List<Student> getAllStudent() {
+        return studentRepository.findAll();
     }
 
-    public ResponseWrapper<StudentDto> findById(int id) {
+    public StudentResponse findById(int id) {
         Optional<Student> studentOptional = studentRepository.findById(id);
+        StudentDto studentDto = null;
         if (studentOptional.isPresent()) {
-            Student student = studentOptional.get();
-            StudentDto studentDto = studentMapper.toDto(student);
-            return new ResponseWrapper<>("Student found", studentDto);
+            Student student;
+            student = studentOptional.get();
+            studentDto = new StudentDto(student.getName(), student.getSurname());
+            return new StudentResponse("Student found", studentDto);
         }
-        return new ResponseWrapper<>("Student not found", null);
+        return new StudentResponse("Student not found", studentDto);
     }
 
-    public ResponseWrapper<StudentDto> createStudent(StudentDto studentDto) {
+    public StudentResponse createStudent(StudentDto studentDto) {
+        Student student = new Student();
         if (studentDto.getName() == null || studentDto.getName().isEmpty() ||
                 studentDto.getSurname() == null || studentDto.getSurname().isEmpty()) {
-            return new ResponseWrapper<>("The blanks cannot be empty");
+            return new StudentResponse("The blanks cannot be empty");
         }
-//        student.setName(studentDto.getName());
-//        student.setSurname(studentDto.getSurname());
-        Student student = studentMapper.toEntity(studentDto);
+        student.setName(studentDto.getName());
+        student.setSurname(studentDto.getSurname());
         try {
             studentRepository.save(student);
         } catch (Exception e) {
-            return new ResponseWrapper<>("DB error creating the student");
+            return new StudentResponse("DB error creating the student");
         }
-        return new ResponseWrapper<>("Student created successfully", studentDto);
+        return new StudentResponse("Student created successfully", studentDto);
     }
-
-    public ResponseWrapper<StudentDto> updateStudent(Integer id, StudentDto studentDto) {
-        Optional<Student> studentOptional = studentRepository.findById(id);
-        if (studentOptional.isPresent()) {
-            Student student = studentOptional.get();
-            student.setName(studentDto.getName());
-            student.setSurname(studentDto.getSurname());
-            student.setInscriptions(inscriptionMapper.toEntityList(studentDto.getInscriptionsDto()));
-            studentRepository.save(student);
-            StudentDto savedStudentDto = studentMapper.toDto(student);
-            return new ResponseWrapper<>(Constants.studentUpdated, savedStudentDto);
-        }
-        return new ResponseWrapper<>(Constants.studentNotUpdated, null);
-    }
-    @Transactional
-    public ResponseWrapper<StudentDto> deleteStudent(Integer id) {
-        Optional<Student> studentOptional = studentRepository.findById(id);
-        if (studentOptional.isPresent()) {
-            Student student = studentOptional.get();
-            studentRepository.delete(student);
-            StudentDto savedStudentDto = studentMapper.toDto(student);
-            return new ResponseWrapper<>(Constants.studentDeleted, savedStudentDto);
-        }
-        return new ResponseWrapper<>(Constants.negative);
-    }
-
-    public ResponseWrapper<List<StudentDto>> findByName(String name) {
-        List<Student> response = studentRepository.findStudentByName(name);
-        List<StudentDto> studentDto = studentMapper.toDtoList(response);
-        if (response != null) {
-            return new ResponseWrapper<>(Constants.positive, studentDto);
-        }
-        return new ResponseWrapper<>(Constants.negative);
-    }
-
-    public ResponseWrapper<List<StudentDto>> byName(String name) {
-        List<Student> response = studentRepository.byName(name);
-        List<StudentDto> studentDto = studentMapper.toDtoList(response);
-        if (response != null) {
-            return new ResponseWrapper<>(Constants.positive, studentDto);
-        }
-        return new ResponseWrapper<>(Constants.negative);
-    }
-
-    public ResponseWrapper<List<StudentDto>> findBySurname(String surname) {
-        List<Student> response = studentRepository.findStudentBySurname(surname);
-        List<StudentDto> studentDto = studentMapper.toDtoList(response);
-        if (studentDto != null) {
-            return new ResponseWrapper<>(Constants.positive, studentDto);
-        }
-        return new ResponseWrapper<>(Constants.negative);
-    }
-
-    public ResponseWrapper<List<StudentDto>> bySurname(String surname) {
-        List<Student> response = studentRepository.bySurname(surname);
-        List<StudentDto> studentDto = studentMapper.toDtoList(response);
-        if (studentDto != null) {
-            return new ResponseWrapper<>(Constants.positive, studentDto);
-        }
-        return new ResponseWrapper<>(Constants.negative);
-    }
-
-    public ResponseWrapper<List<StudentDto>> findStudentByNameAndSurname(StudentParams studentParams) {
-        List<Student> response = studentRepository.findStudentByNameAndSurname(studentParams.getName(), studentParams.getSurname());
-        List<StudentDto> studentDto = studentMapper.toDtoList(response);
-        if (studentDto != null) {
-            return new ResponseWrapper<>(Constants.positive, studentDto);
-        }
-        return new ResponseWrapper<>(Constants.negative);
-    }
-
-    public ResponseWrapper<List<StudentDto>> studentByNameAndSurname(StudentParams studentParams) {
-        List<Student> response = studentRepository.studentByNameAndSurname(studentParams.getName(), studentParams.getSurname());
-        List<StudentDto> studentDto = studentMapper.toDtoList(response);
-        if (studentDto != null) {
-            return new ResponseWrapper<>(Constants.positive, studentDto);
-        }
-        return new ResponseWrapper<>(Constants.negative);
-    }
-
-//    public ResponseWrapper<List<StudentDto>> findStudentByCourseId(int courseId) {
-//        List<Student> response = studentRepository.findStudentByCourseId(courseId);
-//        List<StudentDto> studentDto = studentMapper.toDtoList(response);
-//        if (studentDto != null) {
-//            return new ResponseWrapper<>("Student found", studentDto);
-//        }
-//        return new ResponseWrapper<>("Student not found", null);
-//    }
-
-    public ResponseWrapper<List<StudentDto>> findStudentByInscriptionsAndCourse (int studentId) {
-        List<Student> response = studentRepository.findStudentByInscriptionsAndCourse(studentId);
-        List<StudentDto> studentDto = studentMapper.toDtoList(response);
-        if (studentDto != null) {
-            return new ResponseWrapper<>(Constants.positive, studentDto);
-        }
-        return new ResponseWrapper<>(Constants.negative);
-    }
-
 }
